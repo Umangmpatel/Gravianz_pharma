@@ -111,7 +111,7 @@ const HomeBottomStack = ({ navigation }) => {
         id: parseInt(userInfo.id),
         token: userInfo?.token,
       };
-      setTimeout(async() => {
+      setTimeout(async () => {
         const hResult = await Logout(hRequest);
         if (hResult.success) {
           navigation.dispatch(StackActions.replace("AuthStack"));
@@ -136,7 +136,6 @@ const HomeBottomStack = ({ navigation }) => {
           AlertDialog(hResult.message);
         }
       }, 1000);
-    
     } catch (err) {
       console.log("error from logout", err);
     } finally {
@@ -149,31 +148,31 @@ const HomeBottomStack = ({ navigation }) => {
       setIsDeleteModalVisible(false);
       dispatch(rootLoader(true));
       const hRequest = { id: userInfo.id };
-   setTimeout(async() => {
-    const hResult = await DeleteAccount(hRequest);
-    if (hResult.success) {
-      navigation.dispatch(StackActions.replace("AuthStack"));
-      dispatch({ type: RESET_USER });
-      SuccessDialog("Account deleted successfully");
-    } else {
-      if (hResult.code == 101) {
-        Alert.alert(
-          "Session Expired",
-          "Your login detected on another device",
-          [
-            {
-              text: "Yes",
-              onPress: () => {
-                navigation.dispatch(StackActions.replace("AuthStack"));
-                dispatch({ type: RESET_USER });
-              },
-            },
-          ]
-        );
-      }
-      AlertDialog(hResult.message);
-    }
-   }, 1000);
+      setTimeout(async () => {
+        const hResult = await DeleteAccount(hRequest);
+        if (hResult.success) {
+          navigation.dispatch(StackActions.replace("AuthStack"));
+          dispatch({ type: RESET_USER });
+          SuccessDialog("Account deleted successfully");
+        } else {
+          if (hResult.code == 101) {
+            Alert.alert(
+              "Session Expired",
+              "Your login detected on another device",
+              [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    navigation.dispatch(StackActions.replace("AuthStack"));
+                    dispatch({ type: RESET_USER });
+                  },
+                },
+              ]
+            );
+          }
+          AlertDialog(hResult.message);
+        }
+      }, 1000);
     } catch (err) {
       console.log("error from delete", err);
     } finally {
@@ -203,7 +202,7 @@ const HomeBottomStack = ({ navigation }) => {
     try {
       await Linking.openURL(url);
     } catch (error) {
-      AlertDialog('Error', error.message);
+      AlertDialog("Error", error.message);
     }
   };
 
@@ -222,13 +221,36 @@ const HomeBottomStack = ({ navigation }) => {
         />
         <SafeAreaView style={{ backgroundColor: colors.secondary }} />
         <View style={styles.header}>
-          <TouchableOpacity style={styles.headerIcon} onPress={toggleDrawer}>
-            <Image source={menuIcon} style={styles.headerImage} />
-          </TouchableOpacity>
+          <View
+            style={{
+              height: 40,
+              width: 40,
+              justifyContent: "center",
+              marginLeft: 15,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                height: 40,
+                width: 40,
+                justifyContent: "center",
+              }}
+              onPress={toggleDrawer}
+            >
+              <Image
+                source={menuIcon}
+                style={{
+                  height: 20,
+                  width: 20,
+                  alignSelf: "center",
+                  resizeMode: "contain",
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.headerText}>Home</Text>
           <View style={styles.headerIcon} />
         </View>
-
         <View style={styles.contentWrapper}>
           <CTSpacer height={10} />
           <FlatList
@@ -278,8 +300,8 @@ const HomeBottomStack = ({ navigation }) => {
 
             <TouchableOpacity
               style={styles.drawerItem}
-              onPress={() =>{
-                openURLInBrowser('https://gravianzpharma.com/terms-conditions');
+              onPress={() => {
+                openURLInBrowser("https://gravianzpharma.com/terms-conditions");
               }}
             >
               <Text
@@ -294,7 +316,7 @@ const HomeBottomStack = ({ navigation }) => {
             <TouchableOpacity
               style={styles.drawerItem}
               onPress={() => {
-                openURLInBrowser('https://gravianzpharma.com/privacy-policy');
+                openURLInBrowser("https://gravianzpharma.com/privacy-policy");
               }}
             >
               <Text
@@ -365,11 +387,11 @@ export default HomeBottomStack;
 
 const styles = StyleSheet.create({
   header: {
+    height: 50,
     backgroundColor: colors.secondary,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 10,
   },
   headerIcon: {
     height: 40,
@@ -385,7 +407,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: colors.white,
     fontWeight: "bold",
-    fontSize: fontSizes.f25,
+    fontSize: 20,
   },
   contentWrapper: {
     flex: 1,

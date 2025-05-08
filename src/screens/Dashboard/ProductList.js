@@ -2,6 +2,8 @@ import {
     ActivityIndicator,
     Alert,
     Image,
+    SafeAreaView,
+    StatusBar,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -16,6 +18,7 @@ import { close1 } from "../../assets/icons";
 import SelfModal from "../../components/SelfModal";
 import { RESET_USER } from "../../utils/reduxConstant";
 import { StackActions } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ProductList = ({ route, navigation }) => {
     const dispatch = useDispatch();
@@ -84,44 +87,49 @@ const ProductList = ({ route, navigation }) => {
             setShowCloseButton(false);
         }
     };
+    const insets = useSafeAreaInsets();
 
     return (
         <>
-            <View style={styles.container}>
-                {images.length > 0 ? (
-                    <>
-                        <ImageViewer
-                            imageUrls={images}
-                            backgroundColor="black"
-                            enableImageZoom={true}
-                            loadingRender={() => (
-                                <ActivityIndicator
-                                    size="large"
-                                    color={colors.white}
-                                    style={styles.loader}
-                                />
-                            )}
-                            // onChange={(index) => setCurrentIndex(index)}
-                            onChange={handleImageChange}
-                            onClick={handleImageTap}
-                        />
-                        {showCloseButton && (
-                            <TouchableOpacity
-                                onPress={() => navigation.goBack()}
-                                style={styles.endMessage}
-                            >
-                                <Image
-                                    source={close1}
-                                    style={{ height: 30, width: 30, resizeMode: "contain" }}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        {currentIndex === images.length - 1 &&
-                            navigationFrom === "FileDCR" && (
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: colors.white,
+                    paddingBottom: insets.bottom,
+                }}
+            >
+                <StatusBar
+                    barStyle="light-content"
+                    backgroundColor={colors.secondary}
+                />
+                <SafeAreaView style={{ backgroundColor: colors.secondary }} />
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: colors.white,
+                        paddingBottom: insets.bottom,
+                    }}
+                >
+                    {images.length > 0 ? (
+                        <>
+                            <ImageViewer
+                                imageUrls={images}
+                                backgroundColor="black"
+                                enableImageZoom={true}
+                                loadingRender={() => (
+                                    <ActivityIndicator
+                                        size="large"
+                                        color={colors.white}
+                                        style={styles.loader}
+                                    />
+                                )}
+                                // onChange={(index) => setCurrentIndex(index)}
+                                onChange={handleImageChange}
+                                onClick={handleImageTap}
+                            />
+                            {showCloseButton && (
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        setSelection(true);
-                                    }}
+                                    onPress={() => navigation.goBack()}
                                     style={styles.endMessage}
                                 >
                                     <Image
@@ -130,13 +138,29 @@ const ProductList = ({ route, navigation }) => {
                                     />
                                 </TouchableOpacity>
                             )}
-                    </>
-                ) : dataLoad ? (
-                    <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>No images available</Text>
-                    </View>
-                ) : null}
+                            {currentIndex === images.length - 1 &&
+                                navigationFrom === "FileDCR" && (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setSelection(true);
+                                        }}
+                                        style={styles.endMessage}
+                                    >
+                                        <Image
+                                            source={close1}
+                                            style={{ height: 30, width: 30, resizeMode: "contain" }}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                        </>
+                    ) : dataLoad ? (
+                        <View style={styles.emptyContainer}>
+                            <Text style={styles.emptyText}>No images available</Text>
+                        </View>
+                    ) : null}
+                </View>
             </View>
+
             <SelfModal
                 isVisible={selection}
                 setIsVisible={setSelection}
@@ -151,10 +175,6 @@ const ProductList = ({ route, navigation }) => {
 export default ProductList;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
     loader: {
         flex: 1,
         justifyContent: "center",
